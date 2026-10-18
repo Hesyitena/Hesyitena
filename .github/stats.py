@@ -2,6 +2,7 @@
 
 Run:  GH_TOKEN=<token with repo + read:user> python .github/stats.py  -> writes assets/{stats,langs}-*.svg
 """
+import base64
 import json
 import os
 import urllib.request
@@ -20,7 +21,25 @@ THEMES = {
                   muted="#656d76", accent="#9a6700", live="#1a7f37",
                   langs=["#9a6700", "#0969da", "#1a7f37", "#bc4c00", "#8250df"]),
 }
-MONO = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
+FONTS = Path(__file__).resolve().parent / "fonts"
+SERIF = "Chart, Georgia, serif"
+MONO = "ChartMono, ui-monospace, Consolas, monospace"
+FACES = {  # file -> @font-face descriptors
+    "serif": "font-family:Chart;font-style:normal;font-weight:400",
+    "serif-italic": "font-family:Chart;font-style:italic;font-weight:400",
+    "serif-display": "font-family:Chart;font-style:italic;font-weight:600",
+    "mono": "font-family:ChartMono",
+}
+
+
+def font_style(*names):
+    """<style> embedding the given fonts; GitHub won't load external fonts inside SVG images."""
+    css = "".join(
+        f'@font-face{{{FACES[n]};src:url(data:font/woff;base64,'
+        f'{base64.b64encode((FONTS / f"{n}.woff").read_bytes()).decode()}) format("woff")}}'
+        for n in names
+    )
+    return f"<style>{css}</style>"
 
 LANGS = "languages(first: 20, orderBy: {field: SIZE, direction: DESC}) { edges { size node { name } } }"
 # ponytail: first 100 repos each, paginate if either list ever outgrows that
@@ -66,10 +85,11 @@ def lang_share(repos, top=5):
     return out
 
 
-def frame(c, w, h, title, label, s):
+def frame(c, w, h, title, label, s, fonts):
     s.insert(0, f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="100%" role="img" aria-label="{escape(label)}">\n'
+                f'{font_style(*fonts)}\n'
                 f'<rect x="1" y="1" width="{w-2}" height="{h-2}" rx="12" fill="{c["panel"]}" stroke="{c["frame"]}" stroke-width="2"/>\n'
-                f'<text x="48" y="64" font-family="{MONO}" font-size="20" letter-spacing="4" fill="{c["muted"]}">{title}</text>\n'
+                f'<text x="48" y="66" font-family="{SERIF}" font-style="italic" font-size="30" fill="{c["text"]}">{title}</text>\n'
                 f'<line x1="48" y1="92" x2="{w-48}" y2="92" stroke="{c["panel_line"]}" stroke-width="2"/>')
     s.append("</svg>")
     return "\n".join(s)
@@ -79,39 +99,42 @@ def stats_card(t, d, n_team):
     c, W, H = THEMES[t], 800, 380
     cc = d["contributionsCollection"]
     rows = [
-        ("CONTRIB", cc["contributionCalendar"]["totalContributions"]),
-        ("COMMITS", cc["totalCommitContributions"]),
-        ("PULLS", cc["totalPullRequestContributions"]),
-        ("REVIEWS", cc["totalPullRequestReviewContributions"]),
-        ("TEAM REPOS", n_team),
+        ("contributions", cc["contributionCalendar"]["totalContributions"]),
+        ("commits", cc["totalCommitContributions"]),
+        ("pull requests", cc["totalPullRequestContributions"]),
+        ("reviews", cc["totalPullRequestReviewContributions"]),
+        ("team repositories", n_team),
     ]
-    s, y = [], 148
+    s, y = [], 150
     for k, v in rows:
-        s.append(f'<text x="48" y="{y}" font-family="{MONO}" font-size="21" letter-spacing="3" fill="{c["accent"]}">{k}</text>')
-        s.append(f'<text x="{W-48}" y="{y}" text-anchor="end" font-family="{MONO}" font-size="26" fill="{c["text"]}">{v:,}</text>')
+        # dotted leader between label and figure, like a printed table
+        s.append(f'<line x1="{48 + 13 * len(k) + 16}" y1="{y - 2}" x2="{W - 48 - 18 * len(f"{v:,}") - 16}" y2="{y - 2}" '
+                 f'stroke="{c["frame"]}" stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round"/>')
+        s.append(f'<text x="48" y="{y}" font-family="{SERIF}" font-style="italic" font-size="26" fill="{c["muted"]}">{k}</text>')
+        s.append(f'<text x="{W-48}" y="{y}" text-anchor="end" font-family="{MONO}" font-size="28" fill="{c["text"]}">{v:,}</text>')
         y += 50
-    label = "Last 12 months, private team repos included: " + ", ".join(f"{k.lower()} {v}" for k, v in rows)
-    return frame(c, W, H, "LOG / LAST 12 MONTHS", label, s)
+    label = "The last twelve months, private team repos included: " + ", ".join(f"{k} {v}" for k, v in rows)
+    return frame(c, W, H, "the last twelve months", label, s, ["serif-italic", "mono"])
 
 
 def langs_card(t, share):
     c, W, H = THEMES[t], 800, 380
     colors = c["langs"] + [c["muted"]]
-    s = [f'<defs><clipPath id="bar"><rect x="48" y="128" width="{W-96}" height="16" rx="8"/></clipPath></defs>',
+    s = [f'<defs><clipPath id="bar"><rect x="48" y="128" width="{W-96}" height="12" rx="6"/></clipPath></defs>',
          '<g clip-path="url(#bar)">']
     x = 48.0
     for i, (_, p) in enumerate(share):
         w = (W - 96) * p / 100
-        s.append(f'<rect x="{x:.1f}" y="128" width="{w + 0.5:.1f}" height="16" fill="{colors[i]}"/>')
+        s.append(f'<rect x="{x:.1f}" y="128" width="{w + 0.5:.1f}" height="12" fill="{colors[i]}"/>')
         x += w
     s.append("</g>")
     for i, (name, p) in enumerate(share):
         cx, y = 48 + (i // 3) * 368, 214 + (i % 3) * 56
-        s.append(f'<circle cx="{cx + 8}" cy="{y - 9}" r="8" fill="{colors[i]}"/>')
-        s.append(f'<text x="{cx + 30}" y="{y}" font-family="{MONO}" font-size="24" fill="{c["text"]}">{escape(name)}</text>')
+        s.append(f'<circle cx="{cx + 7}" cy="{y - 8}" r="7" fill="{colors[i]}"/>')
+        s.append(f'<text x="{cx + 28}" y="{y}" font-family="{SERIF}" font-size="26" fill="{c["text"]}">{escape(name)}</text>')
         s.append(f'<text x="{cx + 336}" y="{y}" text-anchor="end" font-family="{MONO}" font-size="22" fill="{c["muted"]}">{p:.1f}%</text>')
     label = "Languages across own and team repos: " + ", ".join(f"{n} {p:.1f}%" for n, p in share)
-    return frame(c, W, H, "LANGS / OWN + TEAM REPOS", label, s)
+    return frame(c, W, H, "languages, own and team repos", label, s, ["serif", "serif-italic", "mono"])
 
 
 if __name__ == "__main__":
@@ -121,6 +144,6 @@ if __name__ == "__main__":
     assert not share or abs(sum(p for _, p in share) - 100) < 0.01, share
     OUT.mkdir(exist_ok=True)
     for theme in THEMES:
-        (OUT / f"stats-{theme}.svg").write_text(stats_card(theme, d, len(team)), encoding="utf-8")
-        (OUT / f"langs-{theme}.svg").write_text(langs_card(theme, share), encoding="utf-8")
+        (OUT / f"stats-{theme}.svg").write_text(stats_card(theme, d, len(team)), encoding="utf-8", newline="\n")
+        (OUT / f"langs-{theme}.svg").write_text(langs_card(theme, share), encoding="utf-8", newline="\n")
     print("ok:", share)
