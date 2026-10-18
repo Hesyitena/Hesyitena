@@ -5,6 +5,7 @@ Run:  GH_TOKEN=<token with repo + read:user> python .github/stats.py  -> writes 
 import base64
 import json
 import os
+import urllib.error
 import urllib.request
 from datetime import date
 from html import escape
@@ -13,6 +14,7 @@ from pathlib import Path
 USER = "Hesyitena"
 OUT = Path(__file__).resolve().parents[1] / "assets"
 HIDE = {"Jupyter Notebook"}
+EXCLUDE = ["Hesyitena/github-activity"]  # backdated commits from an activity generator, not real work
 
 THEMES = {
     "dark": dict(panel="#0d1117", frame="#30363d", panel_line="#21262d", text="#e6edf3",
@@ -65,6 +67,27 @@ def fetch():
     if "errors" in body:
         raise SystemExit(body["errors"])
     return body["data"]["user"]
+
+
+def excluded_per_day():
+    """{YYYY-MM-DD (UTC, authored): commits} across EXCLUDE; a deleted repo just counts as zero."""
+    counts = {}
+    for repo in EXCLUDE:
+        url = f"https://api.github.com/repos/{repo}/commits?per_page=100"
+        while url:
+            req = urllib.request.Request(url, headers={"Authorization": f"bearer {os.environ['GH_TOKEN']}"})
+            try:
+                resp = urllib.request.urlopen(req)
+            except urllib.error.HTTPError as e:
+                if e.code in (404, 409):  # gone, or empty repo
+                    break
+                raise
+            for cm in json.load(resp):
+                day = cm["commit"]["author"]["date"][:10]
+                counts[day] = counts.get(day, 0) + 1
+            nxt = [p for p in resp.headers.get("Link", "").split(",") if 'rel="next"' in p]
+            url = nxt[0][nxt[0].index("<") + 1:nxt[0].index(">")] if nxt else None
+    return counts
 
 
 def lang_share(repos, top=5):
@@ -197,9 +220,17 @@ if __name__ == "__main__":
     assert streaks([("a", 1), ("b", 0), ("c", 2), ("d", 3), ("e", 0)]) == ((2, "c", "d"), (2, "c", "d"))
     assert streaks([("a", 0), ("b", 0)]) == ((0, None, None), (0, None, None))
     d = fetch()
-    weeks = d["contributionsCollection"]["contributionCalendar"]["weeks"]
-    days = [(x["date"], x["contributionCount"]) for w in weeks for x in w["contributionDays"]]
-    weekly = [sum(x["contributionCount"] for x in w["contributionDays"]) for w in weeks]
+    cc = d["contributionsCollection"]
+    gen = excluded_per_day()
+    weeks = [[(x["date"], max(x["contributionCount"] - gen.get(x["date"], 0), 0)) for x in w["contributionDays"]]
+             for w in cc["contributionCalendar"]["weeks"]]
+    days = [x for w in weeks for x in w]
+    weekly = [sum(n for _, n in w) for w in weeks]
+    # ponytail: assumes every excluded commit counted on the calendar (default branch, own email)
+    removed = cc["contributionCalendar"]["totalContributions"] - sum(n for _, n in days)
+    cc["contributionCalendar"]["totalContributions"] -= removed
+    cc["totalCommitContributions"] -= removed
+    print("excluded:", removed)
     team = d["repositoriesContributedTo"]["nodes"]
     share = lang_share(d["repositories"]["nodes"] + team)
     assert not share or abs(sum(p for _, p in share) - 100) < 0.01, share
