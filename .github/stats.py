@@ -1,11 +1,12 @@
-"""Generate stats/langs SVG cards (dark + light) that include private team repos.
+"""Generate stats/langs/streak SVG cards (dark + light) that include private team repos.
 
-Run:  GH_TOKEN=<token with repo + read:user> python .github/stats.py  -> writes assets/{stats,langs}-*.svg
+Run:  GH_TOKEN=<token with repo + read:user> python .github/stats.py  -> writes assets/{stats,langs,streak}-*.svg
 """
 import base64
 import json
 import os
 import urllib.request
+from datetime import date
 from html import escape
 from pathlib import Path
 
@@ -45,7 +46,7 @@ LANGS = "languages(first: 20, orderBy: {field: SIZE, direction: DESC}) { edges {
 # ponytail: first 100 repos each, paginate if either list ever outgrows that
 QUERY = f"""{{ user(login: "{USER}") {{
   contributionsCollection {{
-    contributionCalendar {{ totalContributions }}
+    contributionCalendar {{ totalContributions weeks {{ contributionDays {{ date contributionCount }} }} }}
     totalCommitContributions totalPullRequestContributions totalPullRequestReviewContributions
   }}
   repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {{ nodes {{ nameWithOwner {LANGS} }} }}
@@ -83,6 +84,26 @@ def lang_share(repos, top=5):
     if rest:
         out.append(("Other", 100 * rest / total))
     return out
+
+
+def streaks(days):
+    """days: [(date, count)] oldest first -> ((len, start, end) current, (len, start, end) longest).
+
+    A zero today doesn't break the current streak yet; the day isn't over.
+    """
+    runs, start = [], None
+    for i, (day, n) in enumerate(days):
+        if n and start is None:
+            start = i
+        if not n and start is not None:
+            runs.append((i - start, start, i - 1)); start = None
+    if start is not None:
+        runs.append((len(days) - start, start, len(days) - 1))
+    last = len(days) - 1 - (days[-1][1] == 0)
+    cur = next(((n, a, b) for n, a, b in runs if b == last), (0, None, None))
+    best = max(runs, default=(0, None, None))
+    as_dates = lambda r: (r[0], *(days[i][0] if i is not None else None for i in r[1:]))
+    return as_dates(cur), as_dates(best)
 
 
 def frame(c, w, h, title, label, s, fonts):
@@ -137,8 +158,48 @@ def langs_card(t, share):
     return frame(c, W, H, "languages, own and team repos", label, s, ["serif", "serif-italic", "mono"])
 
 
+def streak_card(t, days, weekly):
+    c, W, H = THEMES[t], 1600, 300
+    cur, best = streaks(days)
+
+    def span(r):
+        if not r[0]:
+            return "none yet"
+        a, b = (date.fromisoformat(x) for x in r[1:])
+        fmt = lambda d: f"{d:%b} {d.day}"
+        return fmt(a) if a == b else f"{fmt(a)} – {fmt(b)}"
+
+    days_word = lambda n: "day" if n == 1 else "days"
+    s = []
+    for x, (k, r) in ((48, ("current streak", cur)), (400, ("longest, past year", best))):
+        s.append(f'<text x="{x}" y="148" font-family="{SERIF}" font-style="italic" font-size="26" fill="{c["muted"]}">{k}</text>')
+        s.append(f'<text x="{x}" y="222" font-family="{MONO}" font-size="68" fill="{c["text"]}">{r[0]}'
+                 f'<tspan dx="14" font-family="{SERIF}" font-style="italic" font-size="28" fill="{c["muted"]}">'
+                 f'{days_word(r[0])}</tspan></text>')
+        s.append(f'<text x="{x}" y="260" font-family="{MONO}" font-size="20" fill="{c["muted"]}">{span(r)}</text>')
+    # weekly totals as a tide-gauge strip; this week in accent
+    x0, x1, top, base = 780, W - 48, 120, 236
+    bw, peak = (x1 - x0) / len(weekly), max(weekly) or 1
+    for i, v in enumerate(weekly):
+        h = max((base - top) * v / peak, 2 if v else 0)
+        fill = c["accent"] if i == len(weekly) - 1 else c["muted"]
+        s.append(f'<rect x="{x0 + i * bw + bw * 0.2:.1f}" y="{base - h:.1f}" width="{bw * 0.6:.1f}" height="{h:.1f}" fill="{fill}"'
+                 f'{"" if i == len(weekly) - 1 else " fill-opacity=\"0.55\""}/>')
+    s.append(f'<line x1="{x0}" y1="{base + 1}" x2="{x1}" y2="{base + 1}" stroke="{c["frame"]}" stroke-width="2"/>')
+    s.append(f'<text x="{x0}" y="268" font-family="{SERIF}" font-style="italic" font-size="22" fill="{c["muted"]}">contributions per week</text>')
+    s.append(f'<text x="{x1}" y="268" text-anchor="end" font-family="{MONO}" font-size="18" fill="{c["muted"]}">peak {peak:,}</text>')
+    label = (f"Current streak {cur[0]} {days_word(cur[0])} ({span(cur)}); "
+             f"longest in the past year {best[0]} {days_word(best[0])} ({span(best)}).")
+    return frame(c, W, H, "streaks", label, s, ["serif-italic", "mono"])
+
+
 if __name__ == "__main__":
+    assert streaks([("a", 1), ("b", 0), ("c", 2), ("d", 3), ("e", 0)]) == ((2, "c", "d"), (2, "c", "d"))
+    assert streaks([("a", 0), ("b", 0)]) == ((0, None, None), (0, None, None))
     d = fetch()
+    weeks = d["contributionsCollection"]["contributionCalendar"]["weeks"]
+    days = [(x["date"], x["contributionCount"]) for w in weeks for x in w["contributionDays"]]
+    weekly = [sum(x["contributionCount"] for x in w["contributionDays"]) for w in weeks]
     team = d["repositoriesContributedTo"]["nodes"]
     share = lang_share(d["repositories"]["nodes"] + team)
     assert not share or abs(sum(p for _, p in share) - 100) < 0.01, share
@@ -146,4 +207,5 @@ if __name__ == "__main__":
     for theme in THEMES:
         (OUT / f"stats-{theme}.svg").write_text(stats_card(theme, d, len(team)), encoding="utf-8", newline="\n")
         (OUT / f"langs-{theme}.svg").write_text(langs_card(theme, share), encoding="utf-8", newline="\n")
+        (OUT / f"streak-{theme}.svg").write_text(streak_card(theme, days, weekly), encoding="utf-8", newline="\n")
     print("ok:", share)

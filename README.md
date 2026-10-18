@@ -17,12 +17,10 @@ contribution graph says more than the repository list.
   <img alt="Now: ground control station for the PENSHIP ASV — rosbridge, MapLibre, Zustand, SQLite, TanStack Start." src="assets/now-light.svg" width="100%">
 </picture>
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com?user=Hesyitena&background=0d1117&border=30363d&stroke=30363d&ring=e3b341&fire=e3b341&currStreakNum=e6edf3&sideNums=e6edf3&currStreakLabel=e3b341&sideLabels=7d8590&dates=7d8590">
-    <img alt="Contribution streak" src="https://streak-stats.demolab.com?user=Hesyitena&background=ffffff&border=d0d7de&stroke=d0d7de&ring=bc4c00&fire=bc4c00&currStreakNum=1f2328&sideNums=1f2328&currStreakLabel=9a6700&sideLabels=656d76&dates=656d76" width="100%">
-  </picture>
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/streak-dark.svg">
+  <img alt="Contribution streaks, private team repos included" src="assets/streak-light.svg" width="100%">
+</picture>
 
 <p align="center">
   <picture>
