@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 380" width="100%" role="img" aria-label="Currently building: ground control station for the PENSHIP autonomous surface vehicle.">
+<rect x="1" y="1" width="1598" height="378" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="2"/>
+<text x="48" y="64" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="20" letter-spacing="4" fill="#7d8590">NOW / TELEMETRY</text>
+<circle cx="1450" cy="57" r="7" fill="#3fb950"><animate attributeName="opacity" values="1;0.25;1" dur="1.6s" repeatCount="indefinite"/></circle>
+<text x="1470" y="64" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="20" letter-spacing="3" fill="#3fb950">LIVE</text>
+<line x1="48" y1="92" x2="1552" y2="92" stroke="#21262d" stroke-width="2"/>
+<text x="48" y="148" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" letter-spacing="3" fill="#e3b341">MISSION</text>
+<text x="290" y="148" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="26" fill="#e6edf3">Ground control station — PENSHIP ASV</text>
+<text x="48" y="198" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" letter-spacing="3" fill="#e3b341">LINK</text>
+<text x="290" y="198" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="26" fill="#e6edf3">rosbridge · WebSocket telemetry</text>
+<text x="48" y="248" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" letter-spacing="3" fill="#e3b341">MAP</text>
+<text x="290" y="248" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="26" fill="#e6edf3">MapLibre · GPS trail · offline tile cache</text>
+<text x="48" y="298" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" letter-spacing="3" fill="#e3b341">STATE</text>
+<text x="290" y="298" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="26" fill="#e6edf3">Zustand · SQLite</text>
+<text x="48" y="348" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="21" letter-spacing="3" fill="#e3b341">BUILD</text>
+<text x="290" y="348" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="26" fill="#e6edf3">TanStack Start · React 19 · TypeScript</text>
+</svg>
