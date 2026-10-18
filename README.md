@@ -14,7 +14,7 @@ contribution graph says more than the repository list.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/now-dark.svg">
-  <img alt="Now: ground control station for the PENSHIP ASV — rosbridge, MapLibre, Zustand, SQLite, TanStack Start." src="assets/now-light.svg" width="100%">
+  <img alt="Logbook: autonomous surface vehicle software, web ground control station, IoT monitoring system, PENSHIP team website, GerakPulih mobile physiotherapy app." src="assets/now-light.svg" width="100%">
 </picture>
 
 <picture>
