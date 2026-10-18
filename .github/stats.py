@@ -47,26 +47,47 @@ def font_style(*names):
 LANGS = "languages(first: 20, orderBy: {field: SIZE, direction: DESC}) { edges { size node { name } } }"
 # ponytail: first 100 repos each, paginate if either list ever outgrows that
 QUERY = f"""{{ user(login: "{USER}") {{
-  contributionsCollection {{
-    contributionCalendar {{ totalContributions weeks {{ contributionDays {{ date contributionCount }} }} }}
-    totalCommitContributions totalPullRequestContributions totalPullRequestReviewContributions
-  }}
+  contributionsCollection {{ contributionYears }}
   repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {{ nodes {{ nameWithOwner {LANGS} }} }}
   repositoriesContributedTo(first: 100, includeUserRepositories: false,
       contributionTypes: [COMMIT, PULL_REQUEST, PULL_REQUEST_REVIEW]) {{ nodes {{ nameWithOwner {LANGS} }} }}
 }} }}"""
+# the API caps one contributionsCollection at a year, so all-time = one aliased collection per year
+YEAR = """y{y}: contributionsCollection(from: "{y}-01-01T00:00:00Z", to: "{y}-12-31T23:59:59Z") {{
+    contributionCalendar {{ totalContributions weeks {{ contributionDays {{ date contributionCount }} }} }}
+    totalCommitContributions totalPullRequestContributions totalPullRequestReviewContributions
+  }}"""
 
 
-def fetch():
+def gql(query):
     req = urllib.request.Request(
         "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY}).encode(),
+        data=json.dumps({"query": query}).encode(),
         headers={"Authorization": f"bearer {os.environ['GH_TOKEN']}"},
     )
     body = json.load(urllib.request.urlopen(req))
     if "errors" in body:
         raise SystemExit(body["errors"])
     return body["data"]["user"]
+
+
+def fetch():
+    """Repos plus all-time totals and a merged day-by-day calendar (oldest first)."""
+    d = gql(QUERY)
+    years = d["contributionsCollection"]["contributionYears"]
+    ys = gql(f'{{ user(login: "{USER}") {{ {" ".join(YEAR.format(y=y) for y in years)} }} }}').values()
+    keys = ["totalCommitContributions", "totalPullRequestContributions", "totalPullRequestReviewContributions"]
+    d["totals"] = {k: sum(y[k] for y in ys) for k in keys}
+    d["totals"]["contributions"] = sum(y["contributionCalendar"]["totalContributions"] for y in ys)
+    # calendar weeks can spill over year boundaries and past today; keep the max per date, drop the future
+    days, today = {}, date.today().isoformat()
+    for y in ys:
+        for w in y["contributionCalendar"]["weeks"]:
+            for x in w["contributionDays"]:
+                if x["date"] <= today:
+                    days[x["date"]] = max(days.get(x["date"], 0), x["contributionCount"])
+    d["days"] = sorted(days.items())
+    return d
 
 
 def excluded_per_day():
@@ -141,12 +162,12 @@ def frame(c, w, h, title, label, s, fonts):
 
 def stats_card(t, d, n_team):
     c, W, H = THEMES[t], 800, 380
-    cc = d["contributionsCollection"]
+    tot = d["totals"]
     rows = [
-        ("contributions", cc["contributionCalendar"]["totalContributions"]),
-        ("commits", cc["totalCommitContributions"]),
-        ("pull requests", cc["totalPullRequestContributions"]),
-        ("reviews", cc["totalPullRequestReviewContributions"]),
+        ("contributions", tot["contributions"]),
+        ("commits", tot["totalCommitContributions"]),
+        ("pull requests", tot["totalPullRequestContributions"]),
+        ("reviews", tot["totalPullRequestReviewContributions"]),
         ("team repositories", n_team),
     ]
     s, y = [], 150
@@ -157,8 +178,8 @@ def stats_card(t, d, n_team):
         s.append(f'<text x="48" y="{y}" font-family="{SERIF}" font-style="italic" font-size="26" fill="{c["muted"]}">{k}</text>')
         s.append(f'<text x="{W-48}" y="{y}" text-anchor="end" font-family="{MONO}" font-size="28" fill="{c["text"]}">{v:,}</text>')
         y += 50
-    label = "The last twelve months, private team repos included: " + ", ".join(f"{k} {v}" for k, v in rows)
-    return frame(c, W, H, "the last twelve months", label, s, ["serif-italic", "mono"])
+    label = "All time, private team repos included: " + ", ".join(f"{k} {v}" for k, v in rows)
+    return frame(c, W, H, "all time", label, s, ["serif-italic", "mono"])
 
 
 def langs_card(t, share):
@@ -194,7 +215,7 @@ def streak_card(t, days, weekly):
 
     days_word = lambda n: "day" if n == 1 else "days"
     s = []
-    for x, (k, r) in ((48, ("current streak", cur)), (400, ("longest, past year", best))):
+    for x, (k, r) in ((48, ("current streak", cur)), (400, ("longest", best))):
         s.append(f'<text x="{x}" y="148" font-family="{SERIF}" font-style="italic" font-size="26" fill="{c["muted"]}">{k}</text>')
         s.append(f'<text x="{x}" y="222" font-family="{MONO}" font-size="68" fill="{c["text"]}">{r[0]}'
                  f'<tspan dx="14" font-family="{SERIF}" font-style="italic" font-size="28" fill="{c["muted"]}">'
@@ -209,10 +230,10 @@ def streak_card(t, days, weekly):
         s.append(f'<rect x="{x0 + i * bw + bw * 0.2:.1f}" y="{base - h:.1f}" width="{bw * 0.6:.1f}" height="{h:.1f}" fill="{fill}"'
                  f'{"" if i == len(weekly) - 1 else " fill-opacity=\"0.55\""}/>')
     s.append(f'<line x1="{x0}" y1="{base + 1}" x2="{x1}" y2="{base + 1}" stroke="{c["frame"]}" stroke-width="2"/>')
-    s.append(f'<text x="{x0}" y="268" font-family="{SERIF}" font-style="italic" font-size="22" fill="{c["muted"]}">contributions per week</text>')
+    s.append(f'<text x="{x0}" y="268" font-family="{SERIF}" font-style="italic" font-size="22" fill="{c["muted"]}">contributions per week, past year</text>')
     s.append(f'<text x="{x1}" y="268" text-anchor="end" font-family="{MONO}" font-size="18" fill="{c["muted"]}">peak {peak:,}</text>')
     label = (f"Current streak {cur[0]} {days_word(cur[0])} ({span(cur)}); "
-             f"longest in the past year {best[0]} {days_word(best[0])} ({span(best)}).")
+             f"longest {best[0]} {days_word(best[0])} ({span(best)}).")
     return frame(c, W, H, "streaks", label, s, ["serif-italic", "mono"])
 
 
@@ -220,16 +241,14 @@ if __name__ == "__main__":
     assert streaks([("a", 1), ("b", 0), ("c", 2), ("d", 3), ("e", 0)]) == ((2, "c", "d"), (2, "c", "d"))
     assert streaks([("a", 0), ("b", 0)]) == ((0, None, None), (0, None, None))
     d = fetch()
-    cc = d["contributionsCollection"]
     gen = excluded_per_day()
-    weeks = [[(x["date"], max(x["contributionCount"] - gen.get(x["date"], 0), 0)) for x in w["contributionDays"]]
-             for w in cc["contributionCalendar"]["weeks"]]
-    days = [x for w in weeks for x in w]
-    weekly = [sum(n for _, n in w) for w in weeks]
+    days = [(day, max(n - gen.get(day, 0), 0)) for day, n in d["days"]]
+    recent = [n for _, n in days[-364:]]
+    weekly = [sum(recent[i:i + 7]) for i in range(0, len(recent), 7)]
     # ponytail: assumes every excluded commit counted on the calendar (default branch, own email)
-    removed = cc["contributionCalendar"]["totalContributions"] - sum(n for _, n in days)
-    cc["contributionCalendar"]["totalContributions"] -= removed
-    cc["totalCommitContributions"] -= removed
+    removed = sum(n for _, n in d["days"]) - sum(n for _, n in days)
+    d["totals"]["contributions"] -= removed
+    d["totals"]["totalCommitContributions"] -= removed
     print("excluded:", removed)
     team = d["repositoriesContributedTo"]["nodes"]
     share = lang_share(d["repositories"]["nodes"] + team)
