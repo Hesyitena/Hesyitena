@@ -43,7 +43,7 @@ contribution graph says more than the repository list.
 ### Tools
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=ros,py,cpp,ts,react,tailwind,arduino,docker,linux,ubuntu,git&theme=dark">
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=ros%2Cpy%2Ccpp%2Cts%2Creact%2Ctailwind%2Carduino%2Cdocker%2Clinux%2Cubuntu%2Cgit&theme=dark">
   <img alt="ROS, Python, C++, TypeScript, React, Tailwind, Arduino, Docker, Linux, Ubuntu, Git" src="https://skillicons.dev/icons?i=ros,py,cpp,ts,react,tailwind,arduino,docker,linux,ubuntu,git&theme=light">
 </picture>
 
