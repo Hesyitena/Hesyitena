@@ -26,12 +26,12 @@ contribution graph says more than the repository list.
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api?username=Hesyitena&show_icons=true&bg_color=0d1117&border_color=30363d&title_color=e3b341&text_color=e6edf3&icon_color=7d8590">
-    <img alt="GitHub stats" src="https://github-readme-stats.vercel.app/api?username=Hesyitena&show_icons=true&bg_color=ffffff&border_color=d0d7de&title_color=9a6700&text_color=1f2328&icon_color=656d76" width="49%">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
+    <img alt="Last 12 months, private team repos included" src="assets/stats-light.svg" width="49%">
   </picture>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-stats.vercel.app/api/top-langs/?username=Hesyitena&layout=compact&hide=jupyter%20notebook&bg_color=0d1117&border_color=30363d&title_color=e3b341&text_color=e6edf3">
-    <img alt="Top languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Hesyitena&layout=compact&hide=jupyter%20notebook&bg_color=ffffff&border_color=d0d7de&title_color=9a6700&text_color=1f2328" width="49%">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/langs-dark.svg">
+    <img alt="Languages across own and team repos" src="assets/langs-light.svg" width="49%">
   </picture>
 </p>
 
