@@ -49,13 +49,10 @@ contribution graph says more than the repository list.
 
 <p>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/TanStack%20Start-161b22?style=for-the-badge&logo=tanstack&logoColor=e3b341"><img alt="TanStack Start" src="https://img.shields.io/badge/TanStack%20Start-eaeef2?style=for-the-badge&logo=tanstack&logoColor=9a6700"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Zustand-161b22?style=for-the-badge"><img alt="Zustand" src="https://img.shields.io/badge/Zustand-eaeef2?style=for-the-badge"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/shadcn%2Fui-161b22?style=for-the-badge&logo=shadcnui&logoColor=e3b341"><img alt="shadcn/ui" src="https://img.shields.io/badge/shadcn%2Fui-eaeef2?style=for-the-badge&logo=shadcnui&logoColor=9a6700"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/MapLibre-161b22?style=for-the-badge&logo=maplibre&logoColor=e3b341"><img alt="MapLibre" src="https://img.shields.io/badge/MapLibre-eaeef2?style=for-the-badge&logo=maplibre&logoColor=9a6700"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/rosbridge-161b22?style=for-the-badge&logo=ros&logoColor=e3b341"><img alt="rosbridge" src="https://img.shields.io/badge/rosbridge-eaeef2?style=for-the-badge&logo=ros&logoColor=9a6700"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/YOLO-161b22?style=for-the-badge&logo=ultralytics&logoColor=e3b341"><img alt="YOLO" src="https://img.shields.io/badge/YOLO-eaeef2?style=for-the-badge&logo=ultralytics&logoColor=9a6700"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Mission%20Planner-161b22?style=for-the-badge"><img alt="Mission Planner" src="https://img.shields.io/badge/Mission%20Planner-eaeef2?style=for-the-badge"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/WSL-161b22?style=for-the-badge"><img alt="WSL" src="https://img.shields.io/badge/WSL-eaeef2?style=for-the-badge"></picture>
 </p>
 
 <sub>alaikas66@gmail.com · Surabaya, UTC+7</sub>
