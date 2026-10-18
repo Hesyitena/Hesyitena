@@ -43,8 +43,10 @@ contribution graph says more than the repository list.
 ### Tools
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=ros%2Cpy%2Ccpp%2Cts%2Creact%2Ctailwind%2Carduino%2Cdocker%2Clinux%2Cubuntu%2Cgit&theme=dark">
-  <img alt="ROS, Python, C++, TypeScript, React, Tailwind, Arduino, Docker, Linux, Ubuntu, Git" src="https://skillicons.dev/icons?i=ros,py,cpp,ts,react,tailwind,arduino,docker,linux,ubuntu,git&theme=light">
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=ros%2Cpy%2Ccpp%2Cc%2Cts%2Cjs%2Creact%2Cvite%2Cnodejs%2Ctailwind%2Csqlite%2Copencv%2Carduino%2Cdocker%2Clinux%2Cubuntu%2Cwindows%2Cgit&perline=9&theme=dark">
+  <img alt="ROS, Python, C++, C, TypeScript, JavaScript, React, Vite, Node.js, Tailwind, SQLite, OpenCV, Arduino, Docker, Linux, Ubuntu, Windows, Git" src="https://skillicons.dev/icons?i=ros,py,cpp,c,ts,js,react,vite,nodejs,tailwind,sqlite,opencv,arduino,docker,linux,ubuntu,windows,git&perline=9&theme=light">
 </picture>
+
+<sub>also TanStack Start · Zustand · shadcn/ui · MapLibre · rosbridge · YOLO · Mission Planner · WSL</sub>
 
 <sub>alaikas66@gmail.com · Surabaya, UTC+7</sub>
