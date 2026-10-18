@@ -1,6 +1,5 @@
 <!--
   Profile README — github.com/Hesyitena
-  Folder assets/ harus ikut di-upload ke repo yang sama.
 -->
 
 <picture>
