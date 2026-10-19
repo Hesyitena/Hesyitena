@@ -5,12 +5,12 @@
 <line x1="48" y1="92" x2="752" y2="92" stroke="#21262d" stroke-width="2"/>
 <defs><clipPath id="bar"><rect x="48" y="128" width="704" height="12" rx="6"/></clipPath></defs>
 <g clip-path="url(#bar)">
-<rect x="48.0" y="128" width="222.7" height="12" fill="#e3b341"/>
-<rect x="270.2" y="128" width="192.6" height="12" fill="#58a6ff"/>
-<rect x="462.3" y="128" width="136.4" height="12" fill="#3fb950"/>
-<rect x="598.2" y="128" width="41.2" height="12" fill="#db6d28"/>
-<rect x="638.8" y="128" width="33.4" height="12" fill="#a371f7"/>
-<rect x="671.7" y="128" width="80.8" height="12" fill="#7d8590"/>
+<rect x="48.0" y="128" width="222.6" height="12" fill="#e3b341"/>
+<rect x="270.1" y="128" width="192.6" height="12" fill="#58a6ff"/>
+<rect x="462.2" y="128" width="136.3" height="12" fill="#3fb950"/>
+<rect x="598.1" y="128" width="41.2" height="12" fill="#db6d28"/>
+<rect x="638.7" y="128" width="33.4" height="12" fill="#a371f7"/>
+<rect x="671.6" y="128" width="80.9" height="12" fill="#7d8590"/>
 </g>
 <circle cx="55" cy="206" r="7" fill="#e3b341"/>
 <text x="76" y="214" font-family="Chart, Georgia, serif" font-size="26" fill="#e6edf3">C++</text>
