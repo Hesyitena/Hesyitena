@@ -1,6 +1,5 @@
 <!--
   Profile README — github.com/Hesyitena
-  Folder assets/ harus ikut di-upload ke repo yang sama.
 -->
 
 <picture>
@@ -37,6 +36,8 @@ contribution graph says more than the repository list.
 
 - [`ros2-smart-obstacle-avoidance`](https://github.com/Hesyitena/ros2-smart-obstacle-avoidance) —
   reactive explorer for TurtleBot3 with adaptive cruise control and randomized turn decisions.
+- [`rag-modul`](https://github.com/Hesyitena/rag-modul) —
+  offline RAG chatbot for lecture PDFs, with page citations. Ollama, FastAPI, ChromaDB.
 
 ### Tools
 
