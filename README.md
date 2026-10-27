@@ -7,7 +7,7 @@
   <img alt="Alek — Computer Engineering, PENS. Software for autonomous surface vehicles." src="assets/banner-light.svg" width="100%">
 </picture>
 
-I write software for an autonomous surface vehicle with **PENSHIP** ([@PenshipTeam](https://github.com/PenshipTeam)), the PENS team that competes at
+I write software for an autonomous surface vehicle with **PENSHIP** ([@Penship Team](https://github.com/Penship-Team)), the PENS team that competes at
 Kontes Kapal Indonesia and Teknofest. Most of that work lives in private team repos, so the
 contribution graph says more than the repository list.
 
