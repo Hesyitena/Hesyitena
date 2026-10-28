@@ -20,8 +20,7 @@ WORK = [  # (project, stack)
     ("IoT monitoring system", "Embedded, web dashboard"),
     ("PENSHIP team website", "React"),
     ("GerakPulih, physiotherapy app", "Flutter"),
-    ("Shiftwheel, radial file converter", "Rust, Tauri"),
-]
+]  # public repos go under "Public" in the README instead, where they're clickable
 PREFIX = "I build "
 PHRASES = ["robotics software for autonomous vehicles", "web ground control stations",
            "IoT monitoring dashboards", "mobile apps in Flutter"]

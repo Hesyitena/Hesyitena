@@ -19,10 +19,14 @@ steer (ROS 2, computer vision), and the web ground control station used to watch
 Outside the vehicle: an IoT monitoring system, the PENSHIP team website, GerakPulih, a Flutter app for at-home physiotherapy, and
 [Shiftwheel](https://github.com/Hesyitena/shiftwheel), an offline Windows tool that converts files from a radial menu (Rust, Tauri).
 
+### Work
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/work-dark.svg">
-  <img alt="Work: autonomous vehicle software (ROS 2, computer vision); web ground control station (React, TypeScript); IoT monitoring system (embedded, web dashboard); PENSHIP team website (React); GerakPulih physiotherapy app (Flutter); Shiftwheel radial file converter (Rust, Tauri)." src="assets/work-light.svg" width="100%">
+  <img alt="Work: autonomous vehicle software (ROS 2, computer vision); web ground control station (React, TypeScript); IoT monitoring system (embedded, web dashboard); PENSHIP team website (React); GerakPulih physiotherapy app (Flutter)." src="assets/work-light.svg" width="100%">
 </picture>
+
+### Activity
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/numbers-dark.svg">
