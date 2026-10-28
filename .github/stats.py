@@ -7,7 +7,7 @@ import json
 import os
 import urllib.error
 import urllib.request
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 
@@ -67,6 +67,7 @@ QUERY = f"""{{ user(login: "{USER}") {{
 YEAR = """y{y}: contributionsCollection(from: "{y}-01-01T00:00:00Z", to: "{y}-12-31T23:59:59Z") {{
     contributionCalendar {{ totalContributions weeks {{ contributionDays {{ date contributionCount }} }} }}
     totalCommitContributions totalPullRequestContributions totalPullRequestReviewContributions
+    commitContributionsByRepository(maxRepositories: 100) {{ repository {{ nameWithOwner }} contributions {{ totalCount }} }}
   }}"""
 
 
@@ -97,29 +98,60 @@ def fetch():
             for x in w["contributionDays"]:
                 if x["date"] <= today:
                     days[x["date"]] = max(days.get(x["date"], 0), x["contributionCount"])
-    d["days"] = sorted(days.items())
+    d["days"] = days
+    # repos whose commits GitHub already put on the calendar, so we neither add nor subtract them twice
+    d["counted"] = {}
+    for y in ys:
+        for r in y["commitContributionsByRepository"]:
+            name = r["repository"]["nameWithOwner"]
+            d["counted"][name] = d["counted"].get(name, 0) + r["contributions"]["totalCount"]
     return d
 
 
-def excluded_per_day():
-    """{YYYY-MM-DD (UTC, authored): commits} across EXCLUDE; a deleted repo just counts as zero."""
+def commits_per_day(repo, author=None):
+    """{YYYY-MM-DD (UTC, authored): commits} on the default branch; a deleted or empty repo is {}."""
     counts = {}
-    for repo in EXCLUDE:
-        url = f"https://api.github.com/repos/{repo}/commits?per_page=100"
-        while url:
-            req = urllib.request.Request(url, headers={"Authorization": f"bearer {os.environ['GH_TOKEN']}"})
-            try:
-                resp = urllib.request.urlopen(req)
-            except urllib.error.HTTPError as e:
-                if e.code in (404, 409):  # gone, or empty repo
-                    break
-                raise
-            for cm in json.load(resp):
-                day = cm["commit"]["author"]["date"][:10]
-                counts[day] = counts.get(day, 0) + 1
-            nxt = [p for p in resp.headers.get("Link", "").split(",") if 'rel="next"' in p]
-            url = nxt[0][nxt[0].index("<") + 1:nxt[0].index(">")] if nxt else None
+    url = f"https://api.github.com/repos/{repo}/commits?per_page=100" + (f"&author={author}" if author else "")
+    while url:
+        req = urllib.request.Request(url, headers={"Authorization": f"bearer {os.environ['GH_TOKEN']}"})
+        try:
+            resp = urllib.request.urlopen(req)
+        except urllib.error.HTTPError as e:
+            if e.code in (404, 409):  # gone, or empty repo
+                break
+            raise
+        for cm in json.load(resp):
+            day = cm["commit"]["author"]["date"][:10]
+            counts[day] = counts.get(day, 0) + 1
+        nxt = [p for p in resp.headers.get("Link", "").split(",") if 'rel="next"' in p]
+        url = nxt[0][nxt[0].index("<") + 1:nxt[0].index(">")] if nxt else None
     return counts
+
+
+def merge(days, counted, team, per_day):
+    """Fold team commits GitHub left off the calendar into it, and take generator commits out.
+
+    days: {date: n} from the calendar. counted: {repo: commits GitHub counted}. team: repos contributed to.
+    per_day(repo, author) -> {date: n}. Returns (days oldest first with no gaps, commits added).
+    """
+    days, added = dict(days), 0
+    for repo in EXCLUDE:  # only what GitHub actually counted can be taken back out
+        if counted.get(repo):
+            for day, n in per_day(repo, USER).items():
+                if day in days:
+                    days[day] = max(days[day] - n, 0)
+            added -= counted[repo]
+    for repo in team:
+        if repo in counted or repo in EXCLUDE:
+            continue
+        for day, n in per_day(repo, USER).items():
+            days[day] = days.get(day, 0) + n
+            added += n
+    # ponytail: commit days are UTC while the calendar uses your timezone, so a late-night commit can land a day off
+    today = date.today()
+    first = date.fromisoformat(min(days)) if days else today
+    full = [(first + timedelta(i)).isoformat() for i in range((today - first).days + 1)]
+    return [(d, days.get(d, 0)) for d in full], added
 
 
 def lang_share(repos, top=5):
@@ -176,7 +208,7 @@ def numbers(t, totals, share, days):
     rows = [("contributions", totals["contributions"]), ("commits", totals["totalCommitContributions"]),
             ("pull requests", totals["totalPullRequestContributions"])]
     s = []
-    for i, (x, (k, v)) in enumerate(zip((0, 250, 470), rows)):
+    for i, (x, (k, v)) in enumerate(zip((0, 290, 580), rows)):
         s.append(f'<g class="up"{delay(0.1 * i)}>'
                  f'<text x="{x}" y="70" font-family="{SANS}" font-weight="800" font-size="64" fill="{c["text"]}">{v:,}</text>'
                  f'<text x="{x}" y="108" font-family="{MONO}" font-size="20" letter-spacing="1.5" fill="{c["muted"]}">{k.upper()}</text></g>')
@@ -192,7 +224,7 @@ def numbers(t, totals, share, days):
 
     cur, best = streaks(days)
     unit = lambda n: "day" if n == 1 else "days"
-    for i, (x, (k, r)) in enumerate(zip((0, 250), (("current streak", cur), ("longest streak", best)))):
+    for i, (x, (k, r)) in enumerate(zip((0, 290), (("current streak", cur), ("longest streak", best)))):
         s.append(f'<g class="up"{delay(0.7 + 0.1 * i)}>'
                  f'<text x="{x}" y="232" font-family="{SANS}" font-weight="800" font-size="64" fill="{c["text"]}">{r[0]}'
                  f'<tspan dx="10" font-family="{MONO}" font-weight="400" font-size="22" fill="{c["muted"]}">{unit(r[0])}</tspan></text>'
@@ -224,15 +256,19 @@ def numbers(t, totals, share, days):
 if __name__ == "__main__":
     assert streaks([("a", 1), ("b", 0), ("c", 2), ("d", 3), ("e", 0)]) == ((2, "c", "d"), (2, "c", "d"))
     assert streaks([("a", 0), ("b", 0)]) == ((0, None, None), (0, None, None))
+    fake = {"team/a": {"2026-01-02": 3}, EXCLUDE[0]: {"2026-01-01": 5}}
+    m, n = merge({"2026-01-01": 2}, {"own/x": 2}, ["team/a", "own/x"], lambda r, a: fake.get(r, {}))
+    assert n == 3 and m[:3] == [("2026-01-01", 2), ("2026-01-02", 3), ("2026-01-03", 0)], (n, m[:3])  # uncounted generator: no cut
+    m, n = merge({"2026-01-01": 6}, {EXCLUDE[0]: 5}, [], lambda r, a: fake.get(r, {}))
+    assert n == -5 and m[0] == ("2026-01-01", 1)
+
     d = fetch()
-    gen = excluded_per_day()
-    days = [(day, max(n - gen.get(day, 0), 0)) for day, n in d["days"]]
-    # ponytail: assumes every excluded commit counted on the calendar (default branch, own email)
-    removed = sum(min(n, gen.get(day, 0)) for day, n in d["days"])
-    d["totals"]["contributions"] -= removed
-    d["totals"]["totalCommitContributions"] -= removed
-    print("excluded:", removed)
-    share = lang_share(d["repositories"]["nodes"] + d["repositoriesContributedTo"]["nodes"])
+    team = d["repositoriesContributedTo"]["nodes"]
+    days, added = merge(d["days"], d["counted"], [r["nameWithOwner"] for r in team], commits_per_day)
+    d["totals"]["contributions"] += added
+    d["totals"]["totalCommitContributions"] += added
+    print("commits added from team repos, net of excluded:", added)
+    share = lang_share(d["repositories"]["nodes"] + team)
     assert not share or abs(sum(p for _, p in share) - 100) < 0.01, share
     OUT.mkdir(exist_ok=True)
     for theme in THEMES:
