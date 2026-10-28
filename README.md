@@ -25,7 +25,7 @@ Outside the vehicle: an IoT monitoring system, the PENSHIP team website, and Ger
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/numbers-dark.svg">
-  <img alt="Contributions, commits, pull requests and language share, all time, team repos included" src="assets/numbers-light.svg" width="100%">
+  <img alt="Contributions, commits, pull requests, language share, commit streaks and weekly contributions over the past year, team repos included" src="assets/numbers-light.svg" width="100%">
 </picture>
 
 ### Tech stack
