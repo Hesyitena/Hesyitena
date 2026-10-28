@@ -39,7 +39,19 @@ def font_style(*names):
         f'{base64.b64encode((FONTS / f"{n}.woff").read_bytes()).decode()}) format("woff")}}'
         for n in names
     )
-    return f"<style>{css}</style>"
+    return f"<style>{css}{MOTION}</style>"
+
+
+# entry animations; GitHub plays them once per page load. Off for people who ask for reduced motion.
+MOTION = ("@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}"
+          "@keyframes grow{from{transform:scaleX(0)}to{transform:none}}"
+          ".up{animation:up .7s cubic-bezier(.2,.7,.2,1) both}"
+          ".grow{transform-box:fill-box;transform-origin:left center;animation:grow .9s cubic-bezier(.2,.7,.2,1) both}"
+          "@media (prefers-reduced-motion:reduce){.up,.grow{animation:none}}")
+
+
+def delay(s):
+    return f' style="animation-delay:{s:.2f}s"'
 
 LANGS = "languages(first: 20, orderBy: {field: SIZE, direction: DESC}) { edges { size node { name } } }"
 # ponytail: first 100 repos each, paginate if either list ever outgrows that
@@ -133,18 +145,19 @@ def numbers(t, totals, share):
     rows = [("contributions", totals["contributions"]), ("commits", totals["totalCommitContributions"]),
             ("pull requests", totals["totalPullRequestContributions"])]
     s = []
-    for x, (k, v) in zip((0, 250, 470), rows):
-        s.append(f'<text x="{x}" y="70" font-family="{SANS}" font-weight="800" font-size="64" fill="{c["text"]}">{v:,}</text>')
-        s.append(f'<text x="{x}" y="108" font-family="{MONO}" font-size="20" letter-spacing="1.5" fill="{c["muted"]}">{k.upper()}</text>')
+    for i, (x, (k, v)) in enumerate(zip((0, 250, 470), rows)):
+        s.append(f'<g class="up"{delay(0.1 * i)}>'
+                 f'<text x="{x}" y="70" font-family="{SANS}" font-weight="800" font-size="64" fill="{c["text"]}">{v:,}</text>'
+                 f'<text x="{x}" y="108" font-family="{MONO}" font-size="20" letter-spacing="1.5" fill="{c["muted"]}">{k.upper()}</text></g>')
     x = 800.0
     for i, (_, p) in enumerate(share):
         w = 800 * p / 100
         fill, op = (c["accent"], 1) if i == 0 else (c["text"], max(0.18, 1 - i * 0.16))
-        s.append(f'<rect x="{x:.1f}" y="44" width="{max(w - 4, 1):.1f}" height="10" fill="{fill}" opacity="{op:.2f}"/>')
+        s.append(f'<rect class="grow"{delay(0.3 + 0.12 * i)} x="{x:.1f}" y="44" width="{max(w - 4, 1):.1f}" height="10" fill="{fill}" opacity="{op:.2f}"/>')
         x += w
     names = "   ".join(f"{'JS' if n == 'JavaScript' else escape(n)} {p:.1f}" for n, p in share if n != "Other")
-    s.append(f'<text x="800" y="96" xml:space="preserve" font-family="{MONO}" font-size="22" fill="{c["muted"]}">{names}</text>')
-    s.append(f'<text x="0" y="190" font-family="{MONO}" font-size="20" fill="{c["muted"]}">All time, private team repos included.</text>')
+    s.append(f'<text class="up"{delay(0.8)} x="800" y="96" xml:space="preserve" font-family="{MONO}" font-size="22" fill="{c["muted"]}">{names}</text>')
+    s.append(f'<text class="up"{delay(0.9)} x="0" y="190" font-family="{MONO}" font-size="20" fill="{c["muted"]}">All time, team repos included.</text>')
     label = ("All time, private team repos included: " + ", ".join(f"{v} {k}" for k, v in rows)
              + ". Languages: " + ", ".join(f"{n} {p:.1f}%" for n, p in share))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{escape(label)}">\n'
