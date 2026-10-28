@@ -20,6 +20,7 @@ WORK = [  # (project, stack)
     ("IoT monitoring system", "Embedded, web dashboard"),
     ("PENSHIP team website", "React"),
     ("GerakPulih, physiotherapy app", "Flutter"),
+    ("Shiftwheel, radial file converter", "Rust, Tauri"),
 ]
 PREFIX = "I build "
 PHRASES = ["robotics software for autonomous vehicles", "web ground control stations",
