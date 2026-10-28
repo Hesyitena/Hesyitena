@@ -8,7 +8,7 @@
   <img alt="Alek. Computer engineering student at PENS, Surabaya. Programming division at PENSHIP. UTC+7. I build robotics software for autonomous vehicles, web ground control stations, IoT monitoring dashboards and mobile apps in Flutter." src="assets/header-light.svg" width="100%">
 </picture>
 
-<sub>Surabaya, Indonesia · [alaikas66@gmail.com](mailto:alaikas66@gmail.com) · [@Penship-Team](https://github.com/Penship-Team)</sub>
+<sub>Surabaya, Indonesia · [alaikas66@gmail.com](mailto:alaikas66@gmail.com) · [@Penship-Team](https://github.com/Penship-Team) &nbsp;<img alt="Profile views" src="https://komarev.com/ghpvc/?username=Hesyitena&label=profile%20views&color=6b7078&style=flat-square&abbreviated=true" align="absmiddle"></sub>
 
 ### About
 
