@@ -13,46 +13,47 @@
 <rect class="grow" style="animation-delay:0.50s" x="0" y="149" width="1600" height="2" fill="#252c35"/>
 <g class="up" style="animation-delay:0.70s"><text x="0" y="232" font-family="Grot, 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="64" fill="#f0f3f6">8<tspan dx="10" font-family="GrotMono, ui-monospace, Consolas, monospace" font-weight="400" font-size="22" fill="#8b939d">days</tspan></text><text x="0" y="270" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="20" letter-spacing="1.5" fill="#8b939d">CURRENT STREAK</text><text x="0" y="302" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="18" fill="#8b939d">Oct 21 – Oct 28</text></g>
 <g class="up" style="animation-delay:0.80s"><text x="290" y="232" font-family="Grot, 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="64" fill="#f0f3f6">12<tspan dx="10" font-family="GrotMono, ui-monospace, Consolas, monospace" font-weight="400" font-size="22" fill="#8b939d">days</tspan></text><text x="290" y="270" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="20" letter-spacing="1.5" fill="#8b939d">LONGEST STREAK</text><text x="290" y="302" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="18" fill="#8b939d">Aug 13 – Aug 24</text></g>
-<rect class="rise" style="animation-delay:0.90s" x="926.2" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:0.91s" x="941.5" y="279.9" width="9.2" height="10.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:0.93s" x="972.3" y="279.9" width="9.2" height="10.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:0.94s" x="987.7" y="278.3" width="9.2" height="11.7" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:0.90s" x="926.2" y="278.9" width="9.2" height="11.1" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:0.91s" x="941.5" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:0.92s" x="956.9" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:0.93s" x="972.3" y="280.5" width="9.2" height="9.5" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:0.94s" x="987.7" y="278.1" width="9.2" height="11.9" fill="#f0f3f6"/>
 <rect class="rise" style="animation-delay:0.97s" x="1018.5" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.00s" x="1064.6" y="276.7" width="9.2" height="13.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.02s" x="1080.0" y="273.1" width="9.2" height="16.9" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.03s" x="1095.4" y="264.2" width="9.2" height="25.8" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.04s" x="1110.8" y="266.6" width="9.2" height="23.4" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.05s" x="1126.2" y="286.8" width="9.2" height="3.2" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.06s" x="1141.5" y="284.8" width="9.2" height="5.2" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.08s" x="1156.9" y="279.1" width="9.2" height="10.9" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.09s" x="1172.3" y="276.7" width="9.2" height="13.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.10s" x="1187.7" y="282.7" width="9.2" height="7.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.11s" x="1203.1" y="275.9" width="9.2" height="14.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.12s" x="1218.5" y="258.2" width="9.2" height="31.8" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.00s" x="1064.6" y="275.2" width="9.2" height="14.8" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.02s" x="1080.0" y="266.1" width="9.2" height="23.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.03s" x="1095.4" y="271.5" width="9.2" height="18.5" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.04s" x="1110.8" y="266.1" width="9.2" height="23.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.05s" x="1126.2" y="286.7" width="9.2" height="3.3" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.06s" x="1141.5" y="283.4" width="9.2" height="6.6" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.08s" x="1156.9" y="280.1" width="9.2" height="9.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.09s" x="1172.3" y="270.2" width="9.2" height="19.8" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.10s" x="1187.7" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.11s" x="1203.1" y="268.6" width="9.2" height="21.4" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.12s" x="1218.5" y="265.7" width="9.2" height="24.3" fill="#f0f3f6"/>
 <rect class="rise" style="animation-delay:1.14s" x="1233.8" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.15s" x="1249.2" y="279.9" width="9.2" height="10.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.16s" x="1264.6" y="281.9" width="9.2" height="8.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.17s" x="1280.0" y="267.4" width="9.2" height="22.6" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.18s" x="1295.4" y="261.8" width="9.2" height="28.2" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.20s" x="1310.8" y="266.6" width="9.2" height="23.4" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.15s" x="1249.2" y="279.7" width="9.2" height="10.3" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.16s" x="1264.6" y="269.8" width="9.2" height="20.2" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.17s" x="1280.0" y="271.1" width="9.2" height="18.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.18s" x="1295.4" y="269.0" width="9.2" height="21.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.20s" x="1310.8" y="253.8" width="9.2" height="36.2" fill="#f0f3f6"/>
 <rect class="rise" style="animation-delay:1.21s" x="1326.2" y="176.0" width="9.2" height="114.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.22s" x="1341.5" y="251.7" width="9.2" height="38.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.23s" x="1356.9" y="255.0" width="9.2" height="35.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.24s" x="1372.3" y="244.9" width="9.2" height="45.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.26s" x="1387.7" y="261.8" width="9.2" height="28.2" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.22s" x="1341.5" y="254.2" width="9.2" height="35.8" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.23s" x="1356.9" y="251.7" width="9.2" height="38.3" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.24s" x="1372.3" y="252.1" width="9.2" height="37.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.26s" x="1387.7" y="262.0" width="9.2" height="28.0" fill="#f0f3f6"/>
 <rect class="rise" style="animation-delay:1.27s" x="1403.1" y="287.0" width="9.2" height="3.0" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.28s" x="1418.5" y="277.5" width="9.2" height="12.5" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.29s" x="1433.8" y="224.7" width="9.2" height="65.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.30s" x="1449.2" y="285.2" width="9.2" height="4.8" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.32s" x="1464.6" y="283.6" width="9.2" height="6.4" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.33s" x="1480.0" y="270.7" width="9.2" height="19.3" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.34s" x="1495.4" y="279.5" width="9.2" height="10.5" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.38s" x="1541.5" y="281.9" width="9.2" height="8.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.39s" x="1556.9" y="275.9" width="9.2" height="14.1" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.40s" x="1572.3" y="267.8" width="9.2" height="22.2" fill="#f0f3f6"/>
-<rect class="rise" style="animation-delay:1.41s" x="1587.7" y="243.3" width="9.2" height="46.7" fill="#ff5a4e"/>
+<rect class="rise" style="animation-delay:1.28s" x="1418.5" y="246.4" width="9.2" height="43.6" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.29s" x="1433.8" y="253.8" width="9.2" height="36.2" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.30s" x="1449.2" y="285.1" width="9.2" height="4.9" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.32s" x="1464.6" y="283.4" width="9.2" height="6.6" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.33s" x="1480.0" y="269.0" width="9.2" height="21.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.34s" x="1495.4" y="280.9" width="9.2" height="9.1" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.38s" x="1541.5" y="278.9" width="9.2" height="11.1" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.39s" x="1556.9" y="276.0" width="9.2" height="14.0" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.40s" x="1572.3" y="263.2" width="9.2" height="26.8" fill="#f0f3f6"/>
+<rect class="rise" style="animation-delay:1.41s" x="1587.7" y="248.8" width="9.2" height="41.2" fill="#ff5a4e"/>
 <rect x="800" y="291" width="800" height="2" fill="#252c35"/>
 <text class="up" style="animation-delay:1.20s" x="800" y="322" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="18" fill="#8b939d">CONTRIBUTIONS PER WEEK, PAST YEAR</text>
-<text class="up" style="animation-delay:1.20s" x="1600" y="322" text-anchor="end" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="18" fill="#8b939d">PEAK 283</text>
+<text class="up" style="animation-delay:1.20s" x="1600" y="322" text-anchor="end" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="18" fill="#8b939d">PEAK 277</text>
 <text class="up" style="animation-delay:1.30s" x="0" y="370" font-family="GrotMono, ui-monospace, Consolas, monospace" font-size="20" fill="#8b939d">All time, team repos included.</text>
 </svg>
